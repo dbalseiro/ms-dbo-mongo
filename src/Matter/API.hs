@@ -5,15 +5,16 @@
 module Matter.API (matterServer, MatterAPI) where
 
 import Servant
+import Types
 import Matter.Types
 
 type MatterAPI =    "fetch" :> Get '[JSON] Matter
                :<|> "merge" :> ReqBody '[JSON] Matter :> Post '[JSON] ()
 
-matterServer :: Server MatterAPI
+matterServer :: ServerT MatterAPI App
 matterServer = fetch :<|> merge
 
-fetch :: Handler Matter
+fetch :: App Matter
 fetch = return $ Matter
   { docketNum       = Just $ DocketNum "1"
   , clientDocketNum = Just $ ClientDocketNum "1"
@@ -21,6 +22,6 @@ fetch = return $ Matter
   , clientNum       = Just $ ClientNum "1"
   }
 
-merge :: Matter -> Handler ()
+merge :: Matter -> App ()
 merge = const $ return ()
 

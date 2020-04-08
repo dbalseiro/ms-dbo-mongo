@@ -5,6 +5,7 @@ REST API for dbo database
 ## Pre Requisites
 
 * Install [stack]
+* Install [dotenv]
 
 ## Setup and installation
 
