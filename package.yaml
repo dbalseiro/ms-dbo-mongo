@@ -1,0 +1,54 @@
+name: ms-dbo-mongo
+version: '0.1.0.0'
+category: Web
+author: Diego Balseiro
+maintainer: dbalseiro@stackbuilders.com
+copyright: MIT
+license: BSD3
+github: dbalseiro/ms-dbo-mongo
+extra-source-files:
+  - README.md
+
+ghc-options:
+  - -Wall
+  - -Werror
+
+library:
+  source-dirs: src
+  exposed-modules:
+    - Lib
+
+  dependencies:
+    - base >=4.7 && <5
+    - aeson
+    - servant-server
+    - wai
+    - warp
+
+executables:
+  ms-dbo-mongo-exe:
+    main: Main.hs
+    source-dirs: app
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - base
+      - ms-dbo-mongo
+
+tests:
+  ms-dbo-mongo-test:
+    main: Spec.hs
+    source-dirs: test
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - base
+      - ms-dbo-mongo
+      - hspec
+      - hspec-wai
+      - hspec-wai-json
+      - aeson
