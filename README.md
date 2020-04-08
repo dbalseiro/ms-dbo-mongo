@@ -1,6 +1,6 @@
 # ms-dbo-mongo
 
-
+REST API for dbo database
 
 ## Pre Requisites
 
@@ -15,6 +15,8 @@ $ git clone
 $ cd ms-dbo-mongo
 $ stack build
 ```
+
+## Running migrations
 
 ## Running tests
 
