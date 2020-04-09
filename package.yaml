@@ -13,6 +13,10 @@ ghc-options:
   - -Wall
   - -Werror
 
+dependencies:
+  - base >=4.7 && <5
+  - text
+
 library:
   source-dirs: src
   exposed-modules:
@@ -20,14 +24,12 @@ library:
     - Types
 
   dependencies:
-    - base >=4.7 && <5
     - aeson
     - bson
     - bytestring
     - mongoDB
     - mtl
     - servant-server
-    - text
     - transformers
     - wai
     - warp
@@ -41,7 +43,6 @@ executables:
       - -rtsopts
       - -with-rtsopts=-N
     dependencies:
-      - base
       - ms-dbo-mongo
 
 tests:
@@ -53,7 +54,6 @@ tests:
       - -rtsopts
       - -with-rtsopts=-N
     dependencies:
-      - base
       - ms-dbo-mongo
       - hspec
       - hspec-wai

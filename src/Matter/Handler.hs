@@ -26,9 +26,9 @@ getAll :: App [Matter]
 getAll = runDB findAll
 
 fetch :: Text -> App Matter
-fetch _id = do
-  mvalue <- runDB $ getDocument _id
-  maybe (notFound _id) return mvalue
+fetch _id =
+  runDB (getDocument _id)
+  >>= maybe (notFound _id) return
 
 merge :: Matter -> App String
 merge = runDB . saveFpData

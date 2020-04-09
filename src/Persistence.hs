@@ -34,7 +34,7 @@ saveFpData :: forall a . FpData a => a -> MongoT String
 saveFpData = fmap show . insert (collName @a) . toDocument
 
 getDocument :: forall a . FpData a => Text -> MongoT (Maybe a)
-getDocument _id =
-  case readMaybe (T.unpack _id) of
-    Nothing -> return Nothing
-    Just i -> fmap fromDocument <$> findOne (select ["_id" =: ObjId i] (collName @a))
+getDocument tid =
+  case readMaybe (T.unpack tid) of
+    Nothing  -> return Nothing
+    Just oid -> fmap fromDocument <$> findOne (select ["_id" =: ObjId oid] (collName @a))
