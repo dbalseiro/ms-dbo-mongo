@@ -1,0 +1,101 @@
+{
+	"info": {
+		"_postman_id": "dafc910a-4a90-43f3-9b56-df1b3a9c8f0e",
+		"name": "HH",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "ms-dbo-mongo",
+			"item": [
+				{
+					"name": "healthcheck",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/healthcheck",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"healthcheck"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "all",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/matter/all",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"matter",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "fetch",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/matter/fetch/5e8eb31b9c12386cbb000000",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"matter",
+								"fetch",
+								"5e8eb31b9c12386cbb000000"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "save",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"_id\": \"5e8eb31b9c12386cbb000000\",\n\t\"docket_num\": \"1\",\n\t\"client_docket_num\": \"2\",\n\t\"matter_num\": \"3\",\n\t\"client_num\": \"4\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/matter/merge",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"matter",
+								"merge"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

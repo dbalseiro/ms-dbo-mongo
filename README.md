@@ -6,6 +6,7 @@ REST API for dbo database
 
 * Install [stack]
 * Install [dotenv]
+* Install [mongoDB]
 
 ## Setup and installation
 
@@ -19,8 +20,16 @@ $ stack build
 
 ## Running migrations
 
+TODO: Pending
+
+## Run the server
+
+TODO: Use environment variables
+
 ## Running tests
 
 ```
 $ stack test
 ```
+
+https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/#install-mongodb-community-edition

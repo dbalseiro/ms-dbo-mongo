@@ -1,6 +1,6 @@
 {-# LANGUAGE DataKinds       #-}
 {-# LANGUAGE TypeOperators   #-}
-{-# LANGUAGE NamedFieldPuns  #-}
+{-# LANGUAGE RecordWildCards #-}
 
 module Server (startApp, app) where
 
@@ -13,13 +13,13 @@ import System.IO (hPutStrLn, stderr)
 
 import Servant
 import Types
-import Matter
+import Matter.Handler
 
 type API =    "healthcheck" :> Get '[JSON] String
          :<|> "matter" :> MatterAPI
 
 startApp :: AppEnv -> IO ()
-startApp AppEnv{appPort, dbConfig} = do
+startApp AppEnv{..} = do
   hPutStrLn stderr $ "Running on port " ++ show appPort
   run appPort (app dbConfig)
 
