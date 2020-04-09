@@ -7,20 +7,17 @@ REST API for dbo database
 * Install [stack]
 * Install [dotenv]
 * Install [mongoDB]
+* Install [migrate-mongo]
 
 ## Setup and installation
 
 * clone this repo and build the project
 
-```
-$ git clone git@github.com:juris-futura/ms-dbo-mongo.git
-$ cd ms-dbo-mongo
-$ stack build
-```
-
-## Running migrations
-
-TODO: Pending
+  ```
+  $ git clone git@github.com:juris-futura/ms-dbo-mongo.git
+  $ cd ms-dbo-mongo
+  $ stack build
+  ```
 
 ## Run the server
 
@@ -28,15 +25,40 @@ TODO: Pending
 * edit `.env` according to your needs
 * run the server using `dotenv`
 
-```
-$ dotenf -f .env stack run
-```
+  ```
+  $ dotenf -f .env stack run
+  ```
 
 * the server should be running on the port that you configured. You can test it using curl:
 
+  ```
+  curl localhost:3000/healthcheck
+  ```
+
+## Running migrations
+
+This will create an initial schema of the database
+
+You can run the migrations with the same configuation you're using to run the server
+
 ```
-curl localhost:3000/healthcheck
+$ dotenv -f .env migrate-mongo up
 ```
+
+If you want to rollback the migration:
+
+```
+$ dotenv -f .env migrate-mongo down
+```
+
+If you want to create new migrations:
+
+```
+$ migrate-mongo create <name>
+```
+
+and edit the file in `./migrations`
+
 
 ## Running tests
 
@@ -50,3 +72,4 @@ You can also use this [postman collection](https://github.com/juris-futura/ms-db
 [stack]: https://docs.haskellstack.org/en/stable/install_and_upgrade/
 [mongoDB]: https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/#install-mongodb-community-edition
 [dotenv]: https://hackage.haskell.org/package/dotenv
+[migrate-mongo]: https://www.npmjs.com/package/migrate-mongo
