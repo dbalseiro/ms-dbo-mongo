@@ -20,27 +20,29 @@ import Network.Socket (HostName)
 import Database.MongoDB
 import qualified Database.MongoDB.Transport.Tls as TLS
 
-
 runDB :: Action IO a -> App a
-runDB a = do
-  DBConfig{..} <- ask
-  liftIO $ do
-    pipe <- doConnect dbSSL (T.unpack dbHost) $ maybe defaultPort PortNumber dbPort
+runDB a = ask >>= liftIO . runDBIO a
 
-    when dbAuth $
-      access pipe master dbName (auth dbUser dbPass) >>= \case
-        True  -> fail "Could not authenticate"
-        False -> return ()
-
-    result <- access pipe master dbName a
-
-    close pipe
-    return result
+runDBIO :: Action IO a -> DBConfig -> IO a
+runDBIO a DBConfig{..} = do
+  pipe <- doConnect dbSSL (T.unpack dbHost) $ maybe defaultPort PortNumber dbPort
+  when dbAuth $ authenticate pipe
+  result <- execute pipe a
+  close pipe
+  return result
 
   where
     doConnect :: Bool -> HostName -> PortID -> IO Pipe
     doConnect True hostname  = TLS.connect hostname
     doConnect False hostname = connect . Host hostname
+
+    authenticate :: Pipe -> IO ()
+    authenticate pipe = execute pipe (auth dbUser dbPass) >>= \case
+      True  -> fail "Could not authenticate"
+      False -> return ()
+
+    execute :: Pipe -> Action IO a -> IO a
+    execute pipe = access pipe master dbName
 
 findAll :: forall a . FpData a => MongoT [a]
 findAll = map fromDocument <$> (rest =<< find (select [] (collName @a)))
@@ -53,3 +55,4 @@ getDocument tid =
   case readMaybe (T.unpack tid) of
     Nothing  -> return Nothing
     Just oid -> fmap fromDocument <$> findOne (select ["_id" =: ObjId oid] (collName @a))
+
