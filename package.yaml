@@ -27,6 +27,7 @@ library:
     - aeson
     - bson
     - bytestring
+    - network
     - mongoDB
     - mtl
     - servant-server
