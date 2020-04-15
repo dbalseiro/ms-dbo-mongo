@@ -26,6 +26,8 @@ data DBConfig = DBConfig
 type App = ReaderT DBConfig Handler
 type MongoT a = Action IO a
 
+data MongoMode = Read | Write
+
 data Role = User | Admin deriving (Eq, Show)
 
 class FpData a where

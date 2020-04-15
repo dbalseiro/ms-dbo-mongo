@@ -23,15 +23,15 @@ matterServer :: ServerT MatterAPI App
 matterServer = getAll :<|> fetch :<|> merge
 
 getAll :: App [Matter]
-getAll = runDB findAll
+getAll = runDB Read findAll
 
 fetch :: Text -> App Matter
 fetch _id =
-  runDB (getDocument _id)
+  runDB Read (getDocument _id)
   >>= maybe (notFound _id) return
 
 merge :: Matter -> App String
-merge = runDB . saveFpData
+merge = runDB Write . saveFpData
 
 notFound :: Text -> App a
 notFound t = throwError $ err500 { errBody = "id not found: " <> toLBS t }
