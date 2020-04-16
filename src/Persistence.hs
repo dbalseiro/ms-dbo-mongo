@@ -20,14 +20,15 @@ import Network.Socket (HostName)
 import Database.MongoDB
 import qualified Database.MongoDB.Transport.Tls as TLS
 
+import Debug.Trace
+
 runDB :: MongoMode -> Action IO a -> App a
 runDB mode a = ask >>= liftIO . runDBIO mode a
 
 runDBIO :: MongoMode -> Action IO a -> DBConfig -> IO a
-runDBIO mode a DBConfig{..} = do
+runDBIO mode action DBConfig{..} = do
   pipe <- doConnect dbSSL (T.unpack dbHost) $ maybe defaultPort PortNumber dbPort
-  when dbAuth $ authenticate pipe
-  result <- execute mode pipe a
+  result <- access pipe (accessmode mode) dbName (authenticate >> action)
   close pipe
   return result
 
@@ -36,20 +37,17 @@ runDBIO mode a DBConfig{..} = do
     doConnect True hostname  = TLS.connect hostname
     doConnect False hostname = connect . Host hostname
 
-    authenticate :: Pipe -> IO ()
-    authenticate pipe = execute Write pipe (authSCRAMSHA1 dbUser dbPass) >>= \case
-      True  -> fail "Could not authenticate"
-      False -> return ()
+    authenticate :: Action IO ()
+    authenticate = when dbAuth $ authMongoCR dbUser dbPass >>= \case
+      False  -> fail "Could not authenticate"
+      True   -> return ()
 
-    execute :: MongoMode -> Pipe -> Action IO a -> IO a
-    execute mode' pipe = access pipe (amode mode') dbName
-
-    amode :: MongoMode -> AccessMode
-    amode Read = slaveOk
-    amode Write = master
+    accessmode :: MongoMode -> AccessMode
+    accessmode Read = master
+    accessmode Write = master
 
 findAll :: forall a . FpData a => MongoT [a]
-findAll = map fromDocument <$> (rest =<< find (select [] (collName @a)))
+findAll = map fromDocument . traceShowId <$> (rest =<< find (select [] (collName @a)))
 
 saveFpData :: forall a . FpData a => a -> MongoT String
 saveFpData = fmap show . insert (collName @a) . toDocument

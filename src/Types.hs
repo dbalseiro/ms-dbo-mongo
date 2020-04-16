@@ -14,13 +14,13 @@ data AppEnv = AppEnv
   } deriving Show
 
 data DBConfig = DBConfig
-  { dbHost :: Text
-  , dbPort :: Maybe PortNumber
-  , dbName :: Text
-  , dbUser :: Text
-  , dbPass :: Text
-  , dbAuth :: Bool
-  , dbSSL  :: Bool
+  { dbHost :: !Text
+  , dbPort :: !(Maybe PortNumber)
+  , dbName :: !Text
+  , dbUser :: !Text
+  , dbPass :: !Text
+  , dbAuth :: !Bool
+  , dbSSL  :: !Bool
   } deriving Show
 
 type App = ReaderT DBConfig Handler
